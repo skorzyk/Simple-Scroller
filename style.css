@@ -9,6 +9,10 @@ html {
   font-family: sans-serif;
 }
 
+img {
+  max-width: 100%;
+}
+
 section {
   height: 100vh;
   text-align: center;
