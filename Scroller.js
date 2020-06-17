@@ -11,7 +11,7 @@ class Scroller {
       currentSectionIndex < 0 ? 0 : currentSectionIndex;
 
     this.isThrottled = false; //czy funkcja jest wstrzymana, potrzebne do 'wielkosci' scrolla
-    this.isScrolledIntoView(this.sections[0]);
+    this.navigation();
   }
   //sprawdzenie na ktorej sekcji jestesmy
   isScrolledIntoView(element) {
@@ -50,9 +50,45 @@ class Scroller {
   };
 
   scrollToCurrentSection = () => {
+    this.selectActiveNavItem();
     this.sections[this.currentSectionIndex].scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
+  };
+
+  navigation = () => {
+    this.navigationContainer = document.createElement('aside');
+    this.navigationContainer.className = 'scroller__navigation';
+    const list = document.createElement('ul');
+
+    this.sections.forEach((section, index) => {
+      const listItem = document.createElement('li');
+
+      listItem.addEventListener('click', () => {
+        this.currentSectionIndex = index;
+        this.scrollToCurrentSection();
+      });
+
+      list.appendChild(listItem);
+    });
+    this.navigationContainer.appendChild(list);
+
+    document.body.appendChild(this.navigationContainer);
+    this.selectActiveNavItem();
+  };
+
+  selectActiveNavItem = () => {
+    if (this.navigationContainer) {
+      const navigationItems = this.navigationContainer.querySelectorAll('li');
+
+      navigationItems.forEach((item, index) => {
+        if (index === this.currentSectionIndex) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
   };
 }
